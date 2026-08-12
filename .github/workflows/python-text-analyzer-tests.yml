@@ -30,15 +30,32 @@ jobs:
       - name: Run unit tests
         run: python -m unittest discover -s python-text-analyzer -p "test_*.py" -v
 
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Ruff
+        uses: astral-sh/ruff-action@v4.1.0
+        with:
+          version: "0.16.0"
+          args: "check --output-format=github"
+          src: "python-text-analyzer"
+
   required-ci:
     name: Required CI
     if: always()
-    needs: test
+    needs: [test, lint]
     runs-on: ubuntu-latest
     steps:
-      - name: Verify test matrix
+      - name: Verify test matrix and lint
         run: |
           if [ "${{ needs.test.result }}" != "success" ]; then
             echo "Test matrix did not succeed: ${{ needs.test.result }}"
+            exit 1
+          fi
+          if [ "${{ needs.lint.result }}" != "success" ]; then
+            echo "Ruff lint did not succeed: ${{ needs.lint.result }}"
             exit 1
           fi
