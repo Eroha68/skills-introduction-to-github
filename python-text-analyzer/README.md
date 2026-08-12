@@ -7,6 +7,7 @@
 - считать символы;
 - считать символы без пробелов;
 - считать слова и уникальные слова;
+- считать среднюю длину анализируемого слова;
 - приблизительно считать предложения;
 - показывать самые частые слова;
 - фильтровать стоп-слова;
@@ -62,7 +63,9 @@ python python-text-analyzer/analyzer.py --text "я и кот дом" --min-lengt
 python python-text-analyzer/analyzer.py --file example.txt --top 10
 ```
 
-Параметры фильтрации влияют на `analyzed_words`, `excluded_words`, `unique_words` и `top_words`. Поле `words` всегда показывает общее число найденных слов до фильтрации.
+Параметры фильтрации влияют на `analyzed_words`, `excluded_words`, `average_word_length`, `unique_words` и `top_words`. Поле `words` всегда показывает общее число найденных слов до фильтрации.
+
+`average_word_length` — средняя длина слов, оставшихся после применения `--stop-word` и `--min-length`, округлённая до двух знаков. Если после фильтрации слов нет, значение равно `0.0`.
 
 ## Тесты
 
@@ -70,7 +73,7 @@ python python-text-analyzer/analyzer.py --file example.txt --top 10
 python -m unittest discover -s python-text-analyzer -p "test_*.py" -v
 ```
 
-GitHub Actions автоматически выполняет тесты на Python 3.10 и 3.12 при изменениях проекта и при Pull Request.
+GitHub Actions автоматически выполняет тесты на Python 3.10 и 3.12 при Pull Request в `main`. Итоговая обязательная проверка называется `Required CI`.
 
 ## Безопасность
 
