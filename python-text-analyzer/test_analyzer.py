@@ -12,6 +12,7 @@ class TextAnalyzerTests(unittest.TestCase):
         self.assertEqual(result["words"], 0)
         self.assertEqual(result["analyzed_words"], 0)
         self.assertEqual(result["excluded_words"], 0)
+        self.assertEqual(result["average_word_length"], 0.0)
         self.assertEqual(result["unique_words"], 0)
         self.assertEqual(result["sentences"], 0)
         self.assertEqual(result["top_words"], [])
@@ -55,6 +56,16 @@ class TextAnalyzerTests(unittest.TestCase):
         self.assertEqual(result["excluded_words"], 2)
         self.assertEqual(result["unique_words"], 2)
 
+    def test_average_word_length_uses_filtered_words(self) -> None:
+        result = analyze_text("я кот дома", min_length=3)
+        self.assertEqual(result["analyzed_words"], 2)
+        self.assertEqual(result["average_word_length"], 3.5)
+
+    def test_average_word_length_is_zero_when_all_words_excluded(self) -> None:
+        result = analyze_text("я и", min_length=3)
+        self.assertEqual(result["analyzed_words"], 0)
+        self.assertEqual(result["average_word_length"], 0.0)
+
     def test_invalid_minimum_word_length_rejected(self) -> None:
         with self.assertRaises(ValueError):
             analyze_text("текст", min_length=0)
@@ -64,6 +75,7 @@ class TextAnalyzerTests(unittest.TestCase):
         rows = list(csv.reader(io.StringIO(result_to_csv(result))))
         self.assertEqual(rows[0], ["section", "name", "value"])
         self.assertIn(["metric", "words", "3"], rows)
+        self.assertIn(["metric", "average_word_length", "5.33"], rows)
         self.assertIn(["top_word", "привет", "2"], rows)
 
 
