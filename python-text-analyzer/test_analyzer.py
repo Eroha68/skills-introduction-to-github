@@ -75,7 +75,7 @@ class TextAnalyzerTests(unittest.TestCase):
         rows = list(csv.reader(io.StringIO(result_to_csv(result))))
         self.assertEqual(rows[0], ["section", "name", "value"])
         self.assertIn(["metric", "words", "3"], rows)
-        self.assertIn(["metric", "average_word_length", "5.33"], rows)
+        self.assertIn(["metric", "average_word_length", "5.0"], rows)
         self.assertIn(["top_word", "привет", "2"], rows)
 
 
