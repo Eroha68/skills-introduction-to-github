@@ -2,13 +2,11 @@ name: Python Text Analyzer Tests
 
 on:
   push:
-    paths:
-      - "python-text-analyzer/**"
-      - ".github/workflows/python-text-analyzer-tests.yml"
+    branches:
+      - main
   pull_request:
-    paths:
-      - "python-text-analyzer/**"
-      - ".github/workflows/python-text-analyzer-tests.yml"
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -31,3 +29,16 @@ jobs:
 
       - name: Run unit tests
         run: python -m unittest discover -s python-text-analyzer -p "test_*.py" -v
+
+  required-ci:
+    name: Required CI
+    if: always()
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify test matrix
+        run: |
+          if [ "${{ needs.test.result }}" != "success" ]; then
+            echo "Test matrix did not succeed: ${{ needs.test.result }}"
+            exit 1
+          fi
