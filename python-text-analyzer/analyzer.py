@@ -6,7 +6,6 @@ import argparse
 import csv
 import io
 import json
-import math
 import re
 from collections import Counter
 from collections.abc import Iterable
