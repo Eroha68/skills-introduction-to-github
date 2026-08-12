@@ -27,7 +27,8 @@ def count_sentences(text: str) -> int:
     if not stripped:
         return 0
 
-    endings = SENTENCE_END_RE.findall(stripped)
+    without_decimal_points = re.sub(r"(?<=\d)\.(?=\d)", "", stripped)
+    endings = SENTENCE_END_RE.findall(without_decimal_points)
     return len(endings) if endings else 1
 
 

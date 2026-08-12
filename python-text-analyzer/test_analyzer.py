@@ -33,6 +33,9 @@ class TextAnalyzerTests(unittest.TestCase):
     def test_sentence_without_terminal_punctuation(self) -> None:
         self.assertEqual(count_sentences("Одно предложение без точки"), 1)
 
+    def test_decimal_number_does_not_split_sentence(self) -> None:
+        self.assertEqual(count_sentences("Версия 3.14 работает."), 1)
+
     def test_negative_top_rejected(self) -> None:
         with self.assertRaises(ValueError):
             analyze_text("текст", top_n=-1)
