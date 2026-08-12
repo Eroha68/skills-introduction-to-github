@@ -58,6 +58,11 @@ def analyze_text(
         word for word in words if len(word) >= min_length and word not in stop_set
     ]
     frequencies = Counter(analyzed_words)
+    average_word_length = (
+        round(sum(len(word) for word in analyzed_words) / len(analyzed_words), 2)
+        if analyzed_words
+        else 0.0
+    )
 
     return {
         "characters": len(text),
@@ -65,6 +70,7 @@ def analyze_text(
         "words": len(words),
         "analyzed_words": len(analyzed_words),
         "excluded_words": len(words) - len(analyzed_words),
+        "average_word_length": average_word_length,
         "unique_words": len(frequencies),
         "sentences": count_sentences(text),
         "top_words": frequencies.most_common(top_n),
@@ -83,6 +89,7 @@ def result_to_csv(result: dict[str, Any]) -> str:
         "words",
         "analyzed_words",
         "excluded_words",
+        "average_word_length",
         "unique_words",
         "sentences",
     ):
@@ -153,6 +160,7 @@ def main() -> int:
         print(f"Слов всего: {result['words']}")
         print(f"Слов после фильтров: {result['analyzed_words']}")
         print(f"Исключено слов: {result['excluded_words']}")
+        print(f"Средняя длина слова: {result['average_word_length']}")
         print(f"Уникальных слов: {result['unique_words']}")
         print(f"Предложений: {result['sentences']}")
         print("Частые слова:")
